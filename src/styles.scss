@@ -1,5 +1,17 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Theme variables */
+:root {
+  --brand-primary: #2ecc71; /* emerald green */
+  --brand-dark: #000000;
+  --brand-light: #ffffff;
+  --muted-bg: #f8f9fa;
+}
+
 body {
-  background: #f6f7f9;
+  background: var(--muted-bg);
+  color: var(--brand-dark);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
 .app-container {
@@ -7,19 +19,43 @@ body {
 }
 
 h1, h2, h3 {
-  color: #333;
+  color: var(--brand-dark);
 }
 
 .table thead {
-  background-color: #0055aa;
-  color: white;
+  background-color: var(--brand-dark);
+  color: var(--brand-light);
 }
 
 .btn-primary {
-  background-color: #0055aa;
+  background-color: var(--brand-primary);
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: #003f7d;
+  background-color: #28b463;
+}
+
+.navbar {
+  background: var(--brand-light);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.navbar .nav-link {
+  color: var(--brand-dark) !important;
+}
+
+.welcome-hero {
+  background: linear-gradient(180deg, var(--brand-light) 0%, #fff 100%);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.welcome-hero .btn-outline-dark {
+  color: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+.list-group-item a.text-primary {
+  color: var(--brand-primary) !important;
 }

@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Book } from "../models/book.model";
+import { API_BASE } from "../config/api.config";
 
 @Injectable({ providedIn: 'root' })
 export class BookService {
-  private api = 'http://localhost:8081/api/books';
+  private api = `${API_BASE}books`;
 
   constructor(private http: HttpClient) {}
 

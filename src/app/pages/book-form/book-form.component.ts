@@ -36,6 +36,7 @@ export class BookFormComponent {
 
   newAuthorName = '';
   newSubjectDescription = '';
+  priceDisplay = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +62,8 @@ export class BookFormComponent {
       this.isEdit = true;
       this.bookService.findById(this.id).subscribe(res => {
         this.book = res;
+        // initialize price display from loaded book
+        this.priceDisplay = this.book.price != null ? this.formatPriceDisplay(this.book.price) : '';
         this.cdr.markForCheck();
       });
     }
@@ -112,5 +115,42 @@ export class BookFormComponent {
       this.newSubjectDescription = '';
       this.cdr.markForCheck();
     });
+  }
+
+  private formatPriceDisplay(value: number): string {
+    try {
+      return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } catch {
+      return value.toFixed(2);
+    }
+  }
+
+  onPriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const raw = input.value || '';
+    this.priceDisplay = raw;
+
+    // Normalize: remove thousand separators, convert comma to dot
+    const normalized = raw.replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
+    const num = parseFloat(normalized);
+    if (!isNaN(num)) {
+      this.book.price = num;
+    } else {
+      this.book.price = 0;
+    }
+  }
+
+  onPriceBlur(): void {
+    if (this.book.price != null) {
+      this.priceDisplay = 'R$ ' + this.formatPriceDisplay(this.book.price);
+    }
+    this.cdr.markForCheck();
+  }
+
+  onPriceFocus(): void {
+    // show raw numeric value for easier editing
+    const raw = this.book.price != null ? String(this.book.price).replace('.', ',') : '';
+    // remove currency symbol if present
+    this.priceDisplay = raw.replace(/R\$\s?/, '');
   }
 }

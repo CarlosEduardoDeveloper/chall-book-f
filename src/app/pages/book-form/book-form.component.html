@@ -29,7 +29,8 @@
 
       <div class="col-4 mb-3">
         <label>Preço</label>
-        <input type="number" step="0.01" class="form-control" [(ngModel)]="book.price" name="price">
+        <input type="text" class="form-control" [(ngModel)]="priceDisplay" name="price" 
+               (input)="onPriceInput($event)" (blur)="onPriceBlur()" (focus)="onPriceFocus()">
       </div>
     </div>
 

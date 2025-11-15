@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject } from "../models/subject.model";
+import { API_BASE } from "../config/api.config";
 
 @Injectable({ providedIn: 'root' })
 export class SubjectService {
-  private api = 'http://localhost:8081/api/subjects';
+  private api = `${API_BASE}subjects`;
 
   constructor(private http: HttpClient) {}
 

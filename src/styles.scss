@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background: #f6f7f9;
+}
+
+.app-container {
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  color: #333;
+}
+
+.table thead {
+  background-color: #0055aa;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #0055aa;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #003f7d;
+}

@@ -28,4 +28,9 @@ export class BookService {
   delete(id: number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+
+  downloadReport() {
+    const url = `${this.api}/download/reports/books-by-author`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
 }

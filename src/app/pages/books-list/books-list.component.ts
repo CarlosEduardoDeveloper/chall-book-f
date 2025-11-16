@@ -5,6 +5,7 @@ import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { Author } from "../../core/models/author.model";
 import { Subject } from "../../core/models/subject.model";
+import { API_BASE } from '../../core/config/api.config';
 
 @Component({
     selector: 'app-books-list',
@@ -16,6 +17,8 @@ export class BooksListComponent  {
 
     books: Book[] = [];
     loading = true;
+    downloading = false;
+    downloadUrl = `${API_BASE}download/reports/books-by-author`;
 
     constructor(private service: BookService, private cdr: ChangeDetectorRef) { }
 
@@ -29,6 +32,31 @@ export class BooksListComponent  {
             this.books = res;
             this.loading = false;
             this.cdr.markForCheck();
+        });
+    }
+
+    downloadReport() {
+        this.downloading = true;
+        this.service.downloadReport().subscribe({
+            next: (blob: Blob) => {
+                const filename = `books-report.pdf`;
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                this.downloading = false;
+                this.cdr.markForCheck();
+            },
+            error: (err) => {
+                console.error('Download error', err);
+                alert('Erro ao gerar o relatório.');
+                this.downloading = false;
+                this.cdr.markForCheck();
+            }
         });
     }
 

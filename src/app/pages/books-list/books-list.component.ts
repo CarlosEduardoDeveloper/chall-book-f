@@ -39,7 +39,7 @@ export class BooksListComponent  {
         this.downloading = true;
         this.service.downloadReport().subscribe({
             next: (blob: Blob) => {
-                const filename = `books-report.pdf`;
+                const filename = `list-books.pdf`;
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;

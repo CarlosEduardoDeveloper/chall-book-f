@@ -1,8 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-/* Theme variables */
 :root {
-  --brand-primary: #2ecc71; /* emerald green */
+  --brand-primary: #2ecc71;
   --brand-dark: #000000;
   --brand-light: #ffffff;
   --muted-bg: #f8f9fa;
@@ -58,4 +57,24 @@ h1, h2, h3 {
 
 .list-group-item a.text-primary {
   color: var(--brand-primary) !important;
+}
+
+.hover-light:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.btn-close-white {
+  filter: brightness(0) invert(1);
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }

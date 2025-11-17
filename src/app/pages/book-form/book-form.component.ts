@@ -8,12 +8,12 @@ import { BookService } from "../../core/services/book.service";
 import { SubjectService } from "../../core/services/subject.service";
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-book-form',
   standalone: true,
-  imports: [FormsModule, RouterLink, NgFor],
+  imports: [FormsModule, RouterLink, NgFor, NgIf],
   templateUrl: './book-form.component.html'
 })
 export class BookFormComponent {
@@ -38,6 +38,14 @@ export class BookFormComponent {
   newSubjectDescription = '';
   priceDisplay = '';
 
+  authorFilter = '';
+  filteredAuthors: Author[] = [];
+  showAuthorDropdown = false;
+
+  subjectFilter = '';
+  filteredSubjects: Subject[] = [];
+  showSubjectDropdown = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -50,10 +58,12 @@ export class BookFormComponent {
   ngOnInit(): void {
     this.authorService.findAll().subscribe(a => {
       this.authors = a;
+      this.filteredAuthors = a;
       this.cdr.markForCheck();
     });
     this.subjectService.findAll().subscribe(s => {
       this.subjects = s;
+      this.filteredSubjects = s;
       this.cdr.markForCheck();
     });
 
@@ -62,7 +72,6 @@ export class BookFormComponent {
       this.isEdit = true;
       this.bookService.findById(this.id).subscribe(res => {
         this.book = res;
-        // initialize price display from loaded book
         this.priceDisplay = this.book.price != null ? this.formatPriceDisplay(this.book.price) : '';
         this.cdr.markForCheck();
       });
@@ -130,7 +139,6 @@ export class BookFormComponent {
     const raw = input.value || '';
     this.priceDisplay = raw;
 
-    // Normalize: remove thousand separators, convert comma to dot
     const normalized = raw.replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
     const num = parseFloat(normalized);
     if (!isNaN(num)) {
@@ -148,9 +156,53 @@ export class BookFormComponent {
   }
 
   onPriceFocus(): void {
-    // show raw numeric value for easier editing
     const raw = this.book.price != null ? String(this.book.price).replace('.', ',') : '';
-    // remove currency symbol if present
     this.priceDisplay = raw.replace(/R\$\s?/, '');
+  }
+
+  onAuthorFilterChange(filter: string): void {
+    this.authorFilter = filter;
+    this.filteredAuthors = this.authors.filter(a =>
+      a.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    this.cdr.markForCheck();
+  }
+
+  selectAuthor(author: Author): void {
+    if (!this.book.authors.find(a => a.id === author.id)) {
+      this.book.authors.push(author);
+    }
+    this.authorFilter = '';
+    this.filteredAuthors = this.authors;
+    this.showAuthorDropdown = false;
+    this.cdr.markForCheck();
+  }
+
+  removeAuthor(author: Author): void {
+    this.book.authors = this.book.authors.filter(a => a.id !== author.id);
+    this.cdr.markForCheck();
+  }
+
+  onSubjectFilterChange(filter: string): void {
+    this.subjectFilter = filter;
+    this.filteredSubjects = this.subjects.filter(s =>
+      s.description.toLowerCase().includes(filter.toLowerCase())
+    );
+    this.cdr.markForCheck();
+  }
+
+  selectSubject(subject: Subject): void {
+    if (!this.book.subjects.find(s => s.id === subject.id)) {
+      this.book.subjects.push(subject);
+    }
+    this.subjectFilter = '';
+    this.filteredSubjects = this.subjects;
+    this.showSubjectDropdown = false;
+    this.cdr.markForCheck();
+  }
+
+  removeSubject(subject: Subject): void {
+    this.book.subjects = this.book.subjects.filter(s => s.id !== subject.id);
+    this.cdr.markForCheck();
   }
 }

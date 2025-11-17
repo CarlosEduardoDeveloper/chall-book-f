@@ -36,27 +36,113 @@
 
     <div class="mb-3">
       <label>Autores</label>
-      <select class="form-select" multiple [(ngModel)]="book.authors" name="authors">
-        <option *ngFor="let a of authors" [ngValue]="a">{{ a.name }}</option>
-      </select>
-      <div class="mt-2">
-        <div class="input-group input-group-sm">
-          <input type="text" class="form-control" [(ngModel)]="newAuthorName" name="newAuthorName" placeholder="Nome do novo autor">
-          <button type="button" class="btn btn-outline-primary" (click)="addAuthor()">Adicionar Autor</button>
+      
+      <!-- Input para filtro -->
+      <div class="input-group mb-2">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar autor..." 
+          [(ngModel)]="authorFilter"
+          (input)="onAuthorFilterChange(authorFilter)"
+          (focus)="showAuthorDropdown = true"
+          name="authorFilter"
+        >
+      </div>
+
+      <!-- Dropdown com opções filtradas -->
+      <div *ngIf="showAuthorDropdown" class="border rounded p-2 mb-2" style="max-height: 200px; overflow-y: auto;">
+        <div *ngIf="filteredAuthors.length > 0; else noAuthors">
+          <div 
+            *ngFor="let author of filteredAuthors" 
+            class="cursor-pointer p-2 hover-light"
+            (click)="selectAuthor(author)"
+            style="cursor: pointer;"
+          >
+            {{ author.name }}
+          </div>
         </div>
+        <ng-template #noAuthors>
+          <p class="text-muted mb-0">Nenhum autor encontrado</p>
+        </ng-template>
+      </div>
+
+      <!-- Autores selecionados (chips) -->
+      <div class="d-flex flex-wrap gap-2 mb-2">
+        <span 
+          *ngFor="let author of book.authors" 
+          class="badge bg-primary"
+        >
+          {{ author.name }}
+          <button 
+            type="button" 
+            class="btn-close btn-close-white ms-1"
+            (click)="removeAuthor(author)"
+            style="display: inline; width: auto; height: auto; font-size: 0.7rem;"
+          ></button>
+        </span>
+      </div>
+
+      <!-- Input para criar novo autor -->
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" [(ngModel)]="newAuthorName" name="newAuthorName" placeholder="Nome do novo autor">
+        <button type="button" class="btn btn-outline-primary" (click)="addAuthor()">Adicionar Autor</button>
       </div>
     </div>
 
     <div class="mb-3">
       <label>Assuntos</label>
-      <select class="form-select" multiple [(ngModel)]="book.subjects" name="subjects">
-        <option *ngFor="let s of subjects" [ngValue]="s">{{ s.description }}</option>
-      </select>
-      <div class="mt-2">
-        <div class="input-group input-group-sm">
-          <input type="text" class="form-control" [(ngModel)]="newSubjectDescription" name="newSubjectDescription" placeholder="Descrição do novo assunto">
-          <button type="button" class="btn btn-outline-primary" (click)="addSubject()">Adicionar Assunto</button>
+      
+      <!-- Input para filtro -->
+      <div class="input-group mb-2">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar assunto..." 
+          [(ngModel)]="subjectFilter"
+          (input)="onSubjectFilterChange(subjectFilter)"
+          (focus)="showSubjectDropdown = true"
+          name="subjectFilter"
+        >
+      </div>
+
+      <!-- Dropdown com opções filtradas -->
+      <div *ngIf="showSubjectDropdown" class="border rounded p-2 mb-2" style="max-height: 200px; overflow-y: auto;">
+        <div *ngIf="filteredSubjects.length > 0; else noSubjects">
+          <div 
+            *ngFor="let subject of filteredSubjects" 
+            class="cursor-pointer p-2 hover-light"
+            (click)="selectSubject(subject)"
+            style="cursor: pointer;"
+          >
+            {{ subject.description }}
+          </div>
         </div>
+        <ng-template #noSubjects>
+          <p class="text-muted mb-0">Nenhum assunto encontrado</p>
+        </ng-template>
+      </div>
+
+      <!-- Assuntos selecionados (chips) -->
+      <div class="d-flex flex-wrap gap-2 mb-2">
+        <span 
+          *ngFor="let subject of book.subjects" 
+          class="badge bg-success"
+        >
+          {{ subject.description }}
+          <button 
+            type="button" 
+            class="btn-close btn-close-white ms-1"
+            (click)="removeSubject(subject)"
+            style="display: inline; width: auto; height: auto; font-size: 0.7rem;"
+          ></button>
+        </span>
+      </div>
+
+      <!-- Input para criar novo assunto -->
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" [(ngModel)]="newSubjectDescription" name="newSubjectDescription" placeholder="Descrição do novo assunto">
+        <button type="button" class="btn btn-outline-primary" (click)="addSubject()">Adicionar Assunto</button>
       </div>
     </div>
 
